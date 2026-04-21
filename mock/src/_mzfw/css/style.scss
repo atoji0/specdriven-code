@@ -1,0 +1,661 @@
+// -----------------------------------------------------------------------------
+// カラーパレット・フォントサイズ・mixin
+// -----------------------------------------------------------------------------
+$primary-color: rgb(20, 20, 20);
+$header-color: #cccccc;
+$header-background-color: $primary-color;
+$form-label-color: rgb(87, 87, 87);
+
+$menu-primary-color: #fff;
+$menu-primary-background-color: #444444;
+$menu-secondary-color: #fff;
+$menu-secondary-background-color: rgb(87, 87, 87);
+$menu-active-color: rgba(204, 204, 204, 1);
+$menu-active-background-color: rgb(142, 28, 46);
+$menu-hover-color: black;
+$menu-hover-background-color: rgb(180, 180, 180);
+
+$button-font-size-small: 10pt;
+$button-font-size-normal: 12pt;
+$button-font-size-large: 14pt;
+
+$table-cell-bg-color: rgba(240, 240, 240, 1);
+$table-cell-hover-bg-color: rgba(220, 220, 220, 1);
+$table-background-color: #f0f2f5;
+$table-font-color: black;
+
+:root {
+  --el-color-primary: #{$primary-color};
+  --el-color-info: #{$primary-color};
+
+  --el-color-primary-light-3: #333;
+  --el-color-primary-light-5: #555;
+  --el-color-primary-light-7: #777;
+  --el-color-primary-light-8: #999;
+  --el-color-primary-light-9: #ccc;
+
+  --el-color-info-light-3: var(--el-color-primary-light-3);
+  --el-color-info-light-5: var(--el-color-primary-light-5);
+  --el-color-info-light-7: var(--el-color-primary-light-7);
+  --el-color-info-light-8: var(--el-color-primary-light-8);
+  --el-color-info-light-9: var(--el-color-primary-light-9);
+}
+
+// 共通インデントmixin（padding-leftベースでより自然に）
+@mixin indent($level) {
+  padding-left: #{10 + ($level * 8)}px;
+}
+
+// -----------------------------------------------------------------------------
+// ベーススタイル
+// -----------------------------------------------------------------------------
+html,
+body {
+  background-color: rgba(255, 255, 255, 1);
+  font-size: 10pt;
+  color: $primary-color;
+}
+
+html,
+body,
+form,
+.Page {
+  min-height: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+// -----------------------------------------------------------------------------
+// ヘッダー
+// -----------------------------------------------------------------------------
+.el-header {
+  --el-header-height: 40px;
+  --el-header-padding: 0 0px;
+  --el-header-width: 100%;
+  border: 1px;
+}
+
+// -----------------------------------------------------------------------------
+// ボタン
+// -----------------------------------------------------------------------------
+
+.el-button {
+  border-radius: 5px;
+  font-size: $button-font-size-normal;
+
+  & > span {
+    font-size: $button-font-size-normal;
+  }
+
+  &.el-button--small {
+    font-size: $button-font-size-small;
+    & > span {
+      font-size: $button-font-size-small;
+    }
+  }
+}
+
+/* 黒ボタン（primary）だけ白文字 */
+.el-button--primary {
+  --el-button-bg-color: #{$primary-color};
+  --el-button-text-color: #ffffff !important;
+  --el-button-hover-bg-color: #333 !important;
+  --el-button-hover-text-color: #ffffff !important;
+}
+
+/* default/info（キャンセル）は白背景＋黒文字 */
+.el-button--default,
+.el-button--info {
+  --el-button-text-color: #000 !important;
+  --el-button-bg-color: #ffffff !important;
+  --el-button-hover-bg-color: #f2f2f2 !important;
+  --el-button-hover-text-color: #000 !important;
+}
+
+// -----------------------------------------------------------------------------
+// テーブル
+// -----------------------------------------------------------------------------
+.el-table__row:hover {
+  background-color: var(--el-table-row-hover-bg-color);
+}
+
+// アイコン列（el-table-column の class-name="icon-col" と組み合わせて使用）
+.icon-col .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// -----------------------------------------------------------------------------
+// スクロールバー
+// -----------------------------------------------------------------------------
+.el-scrollbar__bar.is-horizontal {
+  height: 12px !important;
+}
+
+// -----------------------------------------------------------------------------
+// メニュー
+// -----------------------------------------------------------------------------
+.menu-area,
+.menu-aside {
+  height: 100%;
+  background-color: $primary-color;
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+  overflow: hidden;
+}
+
+// メニュー全体の基本設定
+.el-menu {
+  background-color: $menu-secondary-background-color;
+  border: none;
+  width: 100%;
+
+  // 全メニューアイテムの共通改行設定
+  .el-menu-item,
+  .el-sub-menu__title {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.2 !important;
+    height: auto !important;
+    min-height: 32px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+// サブメニュータイトル
+.el-sub-menu__title {
+  color: $menu-primary-color;
+  background-color: $menu-primary-background-color;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  box-sizing: border-box !important;
+  padding-left: 10px !important;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+// メニューアイテム
+.el-menu-item {
+  color: $menu-secondary-color;
+  background-color: $menu-secondary-background-color;
+  font-size: 14px;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  box-sizing: border-box !important;
+  padding-left: 20px !important;
+
+  &.is-active {
+    color: $menu-active-color;
+    background-color: $menu-active-background-color;
+  }
+
+  &:hover {
+    color: $menu-hover-color;
+    background-color: $menu-hover-background-color;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// グローバルナビ・ヘッダー
+// -----------------------------------------------------------------------------
+.GlobalNavi {
+  background-color: $header-background-color;
+  color: $header-color;
+  font-weight: bold;
+  height: 100%;
+
+  .el-col {
+    display: flex;
+    align-items: center;
+    &.text-right {
+      justify-content: flex-end;
+    }
+    > .el-form {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.HeaderTitle {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 50px;
+  color: $header-color;
+  font-size: 20px;
+}
+
+.HeaderIconLink {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 8px 8px;
+  color: $header-color;
+
+  &:hover {
+    color: white;
+    --el-color-primary: white;
+  }
+}
+
+.HeaderIconPop {
+  text-align: center;
+}
+
+// -----------------------------------------------------------------------------
+// ログイン情報
+// -----------------------------------------------------------------------------
+.LoginInfo {
+  color: $header-color;
+  font-size: 14px;
+  margin-top: 14px;
+  text-align: right;
+  font-weight: bold;
+}
+
+// -----------------------------------------------------------------------------
+// アプリケーション関連
+// -----------------------------------------------------------------------------
+.app-container {
+  padding: 20px;
+}
+
+// -----------------------------------------------------------------------------
+// グリッド関連
+// -----------------------------------------------------------------------------
+.grid-row-low {
+  height: 40px;
+}
+.grid-row-normal-text {
+  height: 40px;
+}
+.grid-row-normal-textarea {
+  height: 80px;
+}
+
+// -----------------------------------------------------------------------------
+// メインエリア
+// -----------------------------------------------------------------------------
+.main-area {
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+// -----------------------------------------------------------------------------
+// アイコン
+// -----------------------------------------------------------------------------
+.el-icon {
+  font-size: 14pt;
+}
+
+// -----------------------------------------------------------------------------
+// アップロード
+// -----------------------------------------------------------------------------
+.upload {
+  display: inline;
+}
+.upload-icon svg {
+  height: 35px;
+  width: 35px;
+}
+
+// -----------------------------------------------------------------------------
+// メニューボタン
+// -----------------------------------------------------------------------------
+.dev-menu-button,
+.qa-menu-button,
+.menu-button {
+  display: inline-block;
+  vertical-align: middle;
+  color: $header-color;
+  border: 0;
+
+  &:focus {
+    background-color: inherit !important;
+  }
+  &:hover {
+    color: white !important;
+    background-color: inherit !important;
+  }
+}
+.menu-button {
+  background-color: $header-background-color;
+}
+
+// -----------------------------------------------------------------------------
+// コンテナヘッダー
+// -----------------------------------------------------------------------------
+.el-container-header {
+  background-color: $primary-color;
+  border-bottom-color: $primary-color;
+}
+
+// -----------------------------------------------------------------------------
+// スクリーンエリア
+// -----------------------------------------------------------------------------
+.ScreenAreaDescription {
+  font-size: 14pt;
+  white-space: nowrap;
+  width: 100%;
+}
+
+// -----------------------------------------------------------------------------
+// 折りたたみ
+// -----------------------------------------------------------------------------
+.el-collapse {
+  --el-collapse-border-color: white;
+  padding: 10px;
+}
+
+.el-collapse-item__header {
+  cursor: default;
+  font-size: 20px !important;
+  pointer-events: none;
+}
+
+.el-collapse-item__arrow {
+  display: none;
+}
+
+// -----------------------------------------------------------------------------
+// ボタン列
+// -----------------------------------------------------------------------------
+.button-col {
+  text-align: left;
+  padding: 12px;
+}
+
+// -----------------------------------------------------------------------------
+// ラジオボタン
+// -----------------------------------------------------------------------------
+.el-radio {
+  margin-right: 10px;
+  --el-color-primary: $primary-color;
+}
+.el-radio-button {
+  --el-color-primary: $primary-color;
+}
+
+// -----------------------------------------------------------------------------
+// ページネーション
+// -----------------------------------------------------------------------------
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: $primary-color;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 700;
+}
+.el-pagination {
+  justify-self: right;
+}
+.el-pagination .el-select {
+  min-width: 120px;
+}
+// -----------------------------------------------------------------------------
+// ナビゲーション
+// -----------------------------------------------------------------------------
+.Navigation .el-step__icon.is-text {
+  font-size: 14pt;
+  white-space: nowrap;
+  font-weight: bold;
+}
+.Navigation .el-step__title.is-success {
+  white-space: nowrap;
+  color: var(--el-color-success);
+}
+.Navigation .el-step__title.is-process {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+}
+.Navigation .el-step__icon-inner {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+}
+.Navigation .el-step__title.is-wait {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+}
+.Navigation .el-step__title.is-success {
+  white-space: nowrap;
+  color: $primary-color;
+}
+
+// -----------------------------------------------------------------------------
+// 入力フィールド
+// -----------------------------------------------------------------------------
+.text-align-right.el-input {
+  text-align: right;
+}
+
+// -----------------------------------------------------------------------------
+// テキスト省略
+// -----------------------------------------------------------------------------
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+// -----------------------------------------------------------------------------
+// フォーム
+// -----------------------------------------------------------------------------
+
+.el-form-item {
+  margin-bottom: 0px !important;
+}
+
+.el-form-item.is-error {
+  margin-bottom: 14px !important;
+}
+
+.el-form-item__error {
+  margin-top: 0 !important;
+  font-size: 12px !important;
+  line-height: 0.7 !important;
+}
+
+// エラー tooltip: 薄赤背景
+.tooltip-error.el-popper {
+  background-color: #fff0f0 !important;
+  color: #c0392b !important;
+  border: 1px solid #f8b4b4 !important;
+}
+.tooltip-error.el-popper .el-popper__arrow::before {
+  background-color: #fff0f0 !important;
+  border-color: #f8b4b4 !important;
+}
+
+.el-form-item .el-form-item__label {
+  font-size: 11pt;
+  white-space: normal;
+  text-align: right;
+  align-items: center;
+  min-height: 30px !important;
+  line-height: 1 !important;
+}
+
+.el-form-item.is-required .el-input__wrapper,
+.el-form-item.is-required .el-select__wrapper,
+.el-form-item.is-required .el-textarea__inner {
+  background-color: lightyellow !important;
+}
+
+// 必須セル（el-form-item 外でも使用可）
+.cell-required .el-input__wrapper,
+.cell-required .el-select__wrapper,
+.cell-required .el-textarea__inner {
+  background-color: lightyellow !important;
+}
+
+// セルエラー（インライン編集テーブル用）
+.cell-error .el-input__wrapper,
+.cell-error .el-select__wrapper {
+  box-shadow: 0 0 0 1px #f56c6c inset !important;
+}
+
+// 一括編集テーブル: 行状態の背景色
+.el-table .row-added td.el-table__cell   { background-color: #f0fdf4 !important; }
+.el-table .row-updated td.el-table__cell { background-color: #fffbeb !important; }
+.el-table .row-deleted td.el-table__cell {
+  background-color: #fef2f2 !important;
+  opacity: 0.7;
+}
+
+.numeric-input .el-input__wrapper > input.el-input__inner {
+  text-align: right !important;
+}
+
+// -----------------------------------------------------------------------------
+// メッセージボックス
+// -----------------------------------------------------------------------------
+.el-message-box__btns {
+  display: flex;
+  justify-content: flex-start !important;
+  flex-direction: row-reverse !important;
+}
+.el-message-box__btns button:nth-child(1) {
+  margin-left: 10px;
+}
+.el-message-box__btns .cancelButton {
+  background-color: lightgray;
+  color: black;
+
+  & span {
+    background-color: lightgray;
+    color: black;
+  }
+  &:hover {
+    background-color: lightgray;
+    color: black;
+  }
+}
+.el-message-box__message {
+  white-space: pre-wrap !important;
+}
+
+// -----------------------------------------------------------------------------
+// テーブル
+// -----------------------------------------------------------------------------
+.el-table--small {
+  font-size: 11pt;
+}
+th {
+  color: $table-font-color;
+  background-color: $table-background-color !important;
+}
+
+// -----------------------------------------------------------------------------
+// clearfix
+// -----------------------------------------------------------------------------
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// フォーカス解除
+// -----------------------------------------------------------------------------
+div:focus {
+  outline: none;
+}
+
+// -----------------------------------------------------------------------------
+// リンク
+// -----------------------------------------------------------------------------
+el-link__inner {
+  font-size: 14px;
+}
+el-link__inner:hover {
+  text-decoration: underline;
+}
+el-link__inner[disabled="disabled"],
+el-link__inner[disabled="disabled"]:hover {
+  color: #ccc;
+  text-decoration: none;
+}
+
+// -----------------------------------------------------------------------------
+// 追加スタイル
+// -----------------------------------------------------------------------------
+/* 画面タイトル用 */
+.screen-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.section-container {
+  padding: 12px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+// -----------------------------------------------------------------------------
+// Tabulator用
+// -----------------------------------------------------------------------------
+/* エラーセルのスタイリング */
+.tabulator-cell[data-error="true"] {
+  border: 2px solid #f56c6c !important;
+  background-color: #fef0f0 !important;
+  cursor: help !important;
+}
+
+.tabulator-cell[data-error="true"]:hover {
+  background-color: #fde2e2 !important;
+  transition: background-color 0s ease;
+}
+
+// 行状態の背景色（BasicBulkEditTabulator 用）
+.tabulator-row.row-added   .tabulator-cell { background-color: #f0fdf4 !important; }
+.tabulator-row.row-updated .tabulator-cell { background-color: #fffbeb !important; }
+.tabulator-row.row-deleted .tabulator-cell {
+  background-color: #fef2f2 !important;
+  opacity: 0.7;
+}
+
+// -----------------------------------------------------------------------------
+// 数値入力
+// -----------------------------------------------------------------------------
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0px;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

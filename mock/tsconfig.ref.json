@@ -1,0 +1,30 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.ref.tsbuildinfo",
+    "types": ["vite/client"],
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "sourceMap": true,
+    "paths": {
+      "@/*": ["./src_ref/*"],
+      "mzfw": ["./src/_mzfw"],
+      "mzfw/*": ["./src/_mzfw/*"],
+      "mzfw_backend": ["./src/backend/_mzfw"],
+      "mzfw_backend/*": ["./src/backend/_mzfw/*"]
+    }
+  },
+  "include": [
+    "src_ref/**/*.ts",
+    "src_ref/**/*.d.ts",
+    "src_ref/**/*.tsx",
+    "src_ref/**/*.vue"
+  ],
+  "exclude": ["node_modules"]
+}

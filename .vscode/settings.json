@@ -1,0 +1,17 @@
+{
+    // メニューを埋め込めるようにする。
+    "markdown-preview-enhanced.enableScriptExecution": true,
+    // PlantUML jar のパスを指定する。
+    "markdown-preview-enhanced.plantumlJarPath": "${workspaceFolder}/.vscode/plantuml.jar",
+    // Tableでセル結合できるようにする。
+    "markdown-preview-enhanced.enableExtendedTableSyntax": true,
+    // 画像貼り付け時の保存先を指定する（ドキュメントと同じフォルダの image/ に保存）。
+    "markdown.copyFiles.destination": {
+        "*": "image/"
+    },
+    // Markdownファイルのフォントとフォーマッタを指定する。
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+        "editor.fontFamily": "BIZ UDゴシック"
+    },
+}

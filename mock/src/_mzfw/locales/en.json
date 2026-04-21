@@ -1,0 +1,76 @@
+{
+  "z9b": {
+    "message": {
+      "info": {
+        "changeLocale": "Switch locale from {p0} to {p1}.",
+        "confirmDelete": "Are you sure you want to delete?",
+        "operationSummary": "Added {p0} items, updated {p1} items, and deleted {p2} items."
+      },
+      "warn": {
+        "fileNotSelected": "No file selected."
+      },
+      "error": {
+        "systemError": "A system error has occurred. Please contact the administrator.",
+        "systemClosed": "The service is currently unavailable. Please try again later.",
+        "fileSizeLimit": "The file size is too large. Please specify a file of {p0}MB or less.",
+        "fileInvalid": "An invalid file has been selected. file: {p0}",
+        "downloadFailed": "Download failed. The process will be aborted.",
+        "targetSheetNotFound": "Target sheet not found. Index: {p0}",
+        "targetDataNotFound": "Target data not found.",
+        "errorOccurred": "{p0} errors occurred. Please check the file contents.",
+        "dummyAuthDisabled": "Dummy authentication setting is disabled.",
+        "dummyAuthFailed": "The specified user ID cannot be used.",
+        "accessDenied": "You do not have permission to access the specified screen."
+      }
+    },
+    "label": {
+      "common": {
+        "ok": "OK",
+        "cancel": "Cancel",
+        "close": "Close",
+        "back": "Back",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "update": "Update",
+        "add": "Add",
+        "search": "Search",
+        "clear": "Clear",
+        "reset": "Reset",
+        "select": "Select",
+        "selectAll": "Select All",
+        "download": "Download All",
+        "upload": "Upload All",
+        "searchCondition": "Search Condition",
+        "searchResult": "Search Result",
+        "inputDetail": "Input Details",
+        "userId": "User ID"
+      },
+      "appTitle": {
+        "dev": "Dev",
+        "qa": "QA"
+      },
+      "header": {
+        "homeLink": "Home",
+        "helpLink": "Help",
+        "supportLink": "Support"
+      },
+      "systemError": {
+        "title": "System Error",
+        "errorInfo": "Error Information",
+        "timeStamp": "Timestamp",
+        "requestLogId": "Request Log ID",
+        "errorMessage": "Error Message"
+      },
+      "accessError": {
+        "title": "Access Error"
+      },
+      "dummyAuth": {
+        "title": "Dummy Authentication",
+        "login": "Login",
+        "message": "Do you want to perform this operation?"
+      }
+    }
+  }
+}

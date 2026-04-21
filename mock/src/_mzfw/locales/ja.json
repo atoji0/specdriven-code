@@ -1,0 +1,76 @@
+{
+  "z9b": {
+    "message": {
+      "info": {
+        "changeLocale": "ロケールを {p0} から {p1} へ切り替えます。",
+        "confirmDelete": "削除します。よろしいですか？",
+        "operationSummary": "データを{p0}件追加、{p1}件更新、{p2}件削除しました。"
+      },
+      "warn": {
+        "fileNotSelected": "ファイルが選択されていません。"
+      },
+      "error": {
+        "systemError": "システムエラーが発生しました。管理者へ連絡してください。",
+        "systemClosed": "現在、本サービスにアクセス出来ません。しばらくお待ちください。",
+        "fileSizeLimit": "ファイルサイズが大きすぎます。{p0}MB以下のファイルを指定してください。",
+        "fileInvalid": "不正ファイルが選択されています。file: {p0}",
+        "downloadFailed": "ダウンロードに失敗しました。処理を中断します。",
+        "targetSheetNotFound": "対象シートが見つかりません。Index: {p0}",
+        "targetDataNotFound": "対象データが見つかりません。",
+        "errorOccurred": "エラーが{p0}件発生しました。",
+        "dummyAuthDisabled": "ダミー認証の設定が無効です。",
+        "dummyAuthFailed": "指定されたユーザIDは利用できません。",
+        "accessDenied": "指定された画面のアクセス権限がありません。"
+      }
+    },
+    "label": {
+      "common": {
+        "ok": "OK",
+        "cancel": "キャンセル",
+        "close": "閉じる",
+        "back": "戻る",
+        "save": "保存",
+        "delete": "削除",
+        "edit": "編集",
+        "create": "新規作成",
+        "update": "更新",
+        "add": "追加",
+        "search": "検索",
+        "clear": "クリア",
+        "reset": "リセット",
+        "select": "選択",
+        "selectAll": "すべて選択",
+        "download": "ダウンロード",
+        "upload": "アップロード",
+        "searchCondition": "検索条件",
+        "searchResult": "検索結果",
+        "inputDetail": "詳細入力",
+        "userId": "ユーザーID"
+      },
+      "appTitle": {
+        "dev": "開発",
+        "qa": "QA"
+      },
+      "header": {
+        "homeLink": "ホーム",
+        "helpLink": "ヘルプ",
+        "supportLink": "問合せ"
+      },
+      "systemError": {
+        "title": "システムエラー",
+        "errorInfo": "エラー情報",
+        "timeStamp": "タイムスタンプ",
+        "requestLogId": "リクエストログID",
+        "errorMessage": "エラーメッセージ"
+      },
+      "accessError": {
+        "title": "アクセスエラー"
+      },
+      "dummyAuth": {
+        "title": "ダミー認証",
+        "login": "ログイン",
+        "message": "この操作を実行しますか？"
+      }
+    }
+  }
+}

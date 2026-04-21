@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: dev:ref (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5174",
+      "webRoot": "${workspaceFolder}/mock",
+      "skipFiles": [],
+      "pauseForSourceMap": true,
+      "sourceMapPathOverrides": {
+        "/@fs/*": "*",
+        "/src_ref/*": "${workspaceFolder}/mock/src_ref/*",
+        "/src/*": "${workspaceFolder}/mock/src/*"
+      }
+    },
+    {
+      "name": "Debug: dev (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/mock",
+      "sourceMapPathOverrides": {
+        "/@fs/*": "*",
+        "/src/*": "${workspaceFolder}/mock/src/*"
+      }
+    }
+  ]
+}
