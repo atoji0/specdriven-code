@@ -106,6 +106,18 @@ export async function getDb(): Promise<IDBPDatabase> {
 
   try {
     _dbInstance = await _openDb();
+
+    // バージョンが一致していてもストアが欠けている場合（バージョン未更新でストアを追加した等）は
+    // openDB() 自体は成功するが後続のトランザクションで NotFoundError になる。
+    // ここで事前チェックし、欠損があれば DB を削除して再作成する。
+    const missingStores = _config.stores.filter(
+      (s) => !_dbInstance!.objectStoreNames.contains(s.name)
+    );
+    if (missingStores.length > 0) {
+      throw new Error(
+        `[dbRuntime] 必要な ObjectStore が存在しません: ${missingStores.map((s) => s.name).join(", ")}`
+      );
+    }
   } catch (err) {
     // スキーマ不整合・バージョン不一致など回復不能な場合は DB を削除して再作成する
     // ⚠️ モックデータはすべてリセットされる
@@ -113,6 +125,8 @@ export async function getDb(): Promise<IDBPDatabase> {
       "[dbRuntime] DB のオープンに失敗しました。スキーマ不整合の可能性があるため DB を再作成します。",
       err
     );
+    _dbInstance?.close();
+    _dbInstance = null;
     await deleteDB(_config.dbName);
     _dbInstance = await _openDb();
   }

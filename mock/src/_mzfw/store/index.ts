@@ -13,7 +13,7 @@ import type { EnvJson } from "../fw-types";
 export const useMzfwStore = defineStore("mzfw", () => {
   const userId = ref<string>(sessionStorage.getItem("userId") || "");
   const roles = ref<string[]>(JSON.parse(sessionStorage.getItem("roles") || "[]"));
-  const isSideMenuOpen = ref<boolean>(true);
+  const isSideMenuOpen = ref<boolean>(window.innerWidth >= 768);
   const env = ref<EnvJson>({
     frontendUrl: "",
     backendUrl: "",

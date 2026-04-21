@@ -100,7 +100,7 @@ const formatDateTime = (date: Date | string) => {
                   format="YYYY/MM/DD"
                   value-format="YYYY-MM-DD"
                   clearable
-                  style="width: auto"
+                  style="width: 100%"
                 />
               </el-form-item>
             </el-col>
@@ -113,7 +113,7 @@ const formatDateTime = (date: Date | string) => {
                   format="YYYY/MM/DD"
                   value-format="YYYY-MM-DD"
                   clearable
-                  style="width: auto"
+                  style="width: 100%"
                 />
               </el-form-item>
             </el-col>

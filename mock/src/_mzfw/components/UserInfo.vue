@@ -26,6 +26,6 @@ const logout = () => {
 <template>
   <span v-if="!isRolesEmpty" class="flex items-center">
     {{ getUserId(true) }}
-    <i class="i-mdi-logout ml-2 min-w-6 min-h-6 text-2xl cursor-pointer" @click="logout" />
+    <i class="i-mdi-logout ml-1 min-w-5 min-h-5 text-xl cursor-pointer" @click="logout" />
   </span>
 </template>

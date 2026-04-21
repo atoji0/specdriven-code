@@ -56,21 +56,21 @@ watch(
       <el-header>
         <el-row class="GlobalNavi">
           <!-- タイトル -->
-          <el-col :xs="8" :sm="12">
+          <el-col :xs="4" :sm="10">
             <MenuExpandIcon />
             <div class="hidden md:flex">
               <AppTitle :appName="appName" />
             </div>
           </el-col>
           <!-- ユーザ名・ロケール切替 -->
-          <el-col :xs="10" :sm="4">
-            <LocaleSelect v-if="localeList.length > 1" :i18n="i18n" :lang-list="localeList" class="mr-5" />
+          <el-col :xs="12" :sm="6">
+            <LocaleSelect v-if="localeList.length > 1" :i18n="i18n" :lang-list="localeList" class="mr-4" />
             <UserInfo :router="appRouter" />
           </el-col>
           <!-- 表示日時 -->
-          <el-col :xs="3" :sm="5" class="text-left pr-3">{{ getCurrentDate() }}</el-col>
+          <el-col :xs="8" :sm="5" class="justify-end pr-2">{{ getCurrentDate() }}</el-col>
           <!-- ロゴ -->
-          <el-col :sm="3" class="flex justify-end pr-4">
+          <el-col :xs="0" :sm="3" class="justify-end pr-4">
             <Logo :show="appConfig.showLogo" />
           </el-col>
         </el-row>
@@ -79,7 +79,7 @@ watch(
         <Menu :menus="menus" :active-path="route.path" @navigate="appRouter.push" />
         <el-main>
           <Breadcrumb :menus="menus" :active-path="route.path" />
-          <div style="min-width: 360px">
+          <div>
             <router-view />
           </div>
         </el-main>

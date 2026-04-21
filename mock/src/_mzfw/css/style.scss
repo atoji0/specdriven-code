@@ -157,6 +157,17 @@ form,
   overflow: hidden;
 }
 
+// モバイルではサイドバーをオーバーレイ表示（コンテンツを押し出さない）
+@media (max-width: 767px) {
+  .menu-area {
+    position: fixed !important;
+    top: 40px; // el-header の高さ
+    left: 0;
+    height: calc(100dvh - 40px) !important;
+    z-index: 100;
+  }
+}
+
 // メニュー全体の基本設定
 .el-menu {
   background-color: $menu-secondary-background-color;
