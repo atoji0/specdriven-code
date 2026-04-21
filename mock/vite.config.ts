@@ -7,6 +7,10 @@ import path from "path";
 export default defineConfig({
   base: "./",
   publicDir: "public",
+  build: {
+    outDir: "../docs",
+    emptyOutDir: true,
+  },
   // index.ref.html も同フォルダにあるため、スキャン対象を index.html に限定する
   optimizeDeps: {
     entries: ["index.html"],

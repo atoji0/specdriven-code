@@ -44,17 +44,6 @@ const startScan = async () => {
     scanning.value      = true;
     statusMessage.value = "バーコードをカメラに向けてください";
 
-    // カメラ起動後にトーチ対応チェック
-    if (videoEl.value?.srcObject) {
-      const stream = videoEl.value.srcObject as MediaStream;
-      const track  = stream.getVideoTracks()[0];
-      if (track) {
-        activeTrack = track;
-        const caps = track.getCapabilities?.() as any;
-        torchSupported.value = !!caps?.torch;
-      }
-    }
-
     activeControls = await reader.decodeFromConstraints(
       {
         video: {
@@ -76,6 +65,17 @@ const startScan = async () => {
         }
       }
     );
+
+    // decodeFromConstraints 完了後に srcObject が設定されるため、ここでトーチ対応チェック
+    if (videoEl.value?.srcObject) {
+      const stream = videoEl.value.srcObject as MediaStream;
+      const track  = stream.getVideoTracks()[0];
+      if (track) {
+        activeTrack = track;
+        const caps = track.getCapabilities?.() as any;
+        torchSupported.value = !!caps?.torch;
+      }
+    }
 
   } catch (e: any) {
     scanning.value = false;
@@ -101,11 +101,17 @@ const toggleTorch = async () => {
 
 // ─── OutSystems 方式のリセット ─────────────────────
 // controls.stop() + ストリーム停止 + srcObject = null の3段階
+// NOTE: ZXing の controls.stop() はストリームを止めた後にトーチ OFF を applyConstraints
+//       するが、停止済みトラックへの applyConstraints は Chrome 内部で setPhotoOptions を
+//       呼び "setPhotoOptions failed undefined" を吐いて reject する。そのため catch で握り潰す。
 const resetDecode = () => {
-  activeControls?.stop();
+  const ctrl = activeControls;
   activeControls = null;
   activeTrack = null;
   torchOn.value = false;
+  if (ctrl) {
+    Promise.resolve(ctrl.stop()).catch(() => {});
+  }
   const video = videoEl.value;
   if (video) {
     const stream = video.srcObject as MediaStream | null;
