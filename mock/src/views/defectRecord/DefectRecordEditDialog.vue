@@ -138,9 +138,10 @@ const stopCamera = () => {
   }
 };
 
-// el-switch の @change で呼ばれる（新値が引数で渡される）
+// ボタン click で呼ばれる（!flashEnabled を渡す）
 const applyFlash = async (on: boolean | string | number) => {
   if (!flashTrack || !flashSupported.value) return;
+  flashEnabled.value = !!on;
   try {
     await flashTrack.applyConstraints({
       advanced: [{ torch: !!on } as any],
@@ -230,12 +231,10 @@ const initKonva = (containerWidth: number, containerHeight: number) => {
 const capturePhoto = () => {
   if (!videoEl.value || !stage) return;
   const video = videoEl.value;
-  const stageW = stage.width();
-  const stageH = stage.height();
 
-  // ネイティブ解像度でキャプチャ
-  const nativeW = video.videoWidth || stageW;
-  const nativeH = video.videoHeight || stageH;
+  // ネイティブ解像度でキャプチャ（v-if でビデオ要素が消える前に実行）
+  const nativeW = video.videoWidth || 640;
+  const nativeH = video.videoHeight || 480;
   const nativeCanvas = document.createElement("canvas");
   nativeCanvas.width = nativeW;
   nativeCanvas.height = nativeH;
@@ -244,20 +243,32 @@ const capturePhoto = () => {
   capturedNativeWidth.value = nativeW;
   capturedNativeHeight.value = nativeH;
 
-  // Konva表示用に縮小してセット
-  const img = new window.Image();
-  img.onload = () => {
-    imageLayer!.destroyChildren();
-    const konvaImg = new Konva.Image({ image: img, width: stageW, height: stageH });
-    imageLayer!.add(konvaImg);
-    imageLayer!.batchDraw();
-    clearCanvas();
-    hasPhoto.value = true;
-  };
-  img.src = capturedImageSrc.value;
-
   // カメラ停止
   stopCamera();
+
+  // hasPhoto = true でステージを表示 → DOM 更新後に実際の幅でリサイズしてから描画
+  hasPhoto.value = true;
+  nextTick(() => {
+    if (!stageContainer.value || !stage) return;
+    const actualW = stageContainer.value.offsetWidth;
+    if (actualW > 0) {
+      const actualH = Math.round(actualW * 0.75);
+      stageContainer.value.style.height = actualH + "px";
+      stage.width(actualW);
+      stage.height(actualH);
+    }
+    const stageW = stage!.width();
+    const stageH = stage!.height();
+    const img = new window.Image();
+    img.onload = () => {
+      imageLayer!.destroyChildren();
+      const konvaImg = new Konva.Image({ image: img, width: stageW, height: stageH });
+      imageLayer!.add(konvaImg);
+      imageLayer!.batchDraw();
+      clearCanvas();
+    };
+    img.src = capturedImageSrc.value;
+  });
 };
 
 const undoStroke = () => {
@@ -594,11 +605,14 @@ defineExpose({ open });
           <el-icon><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 15.2A3.2 3.2 0 1 0 12 8.8a3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zM9 3l-1.83 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9z"/></svg></el-icon>
           撮影
         </el-button>
-        <div v-if="!hasPhoto && flashSupported" class="flex items-center gap-1" style="height:32px;">
-          <el-icon style="font-size:16px;"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></el-icon>
-          <span style="font-size:13px;">フラッシュ</span>
-          <el-switch v-model="flashEnabled" active-color="#E6A23C" @change="applyFlash" />
-        </div>
+        <el-button
+          v-if="!hasPhoto && flashSupported"
+          :type="flashEnabled ? 'warning' : 'default'"
+          @click="applyFlash(!flashEnabled)"
+        >
+          <el-icon><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></el-icon>
+          フラッシュ {{ flashEnabled ? "ON" : "OFF" }}
+        </el-button>
         <el-button
           v-if="hasPhoto"
           :disabled="strokes.length === 0"
