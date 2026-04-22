@@ -232,16 +232,39 @@ const capturePhoto = () => {
   if (!videoEl.value || !stage) return;
   const video = videoEl.value;
 
-  // ネイティブ解像度でキャプチャ（v-if でビデオ要素が消える前に実行）
-  const nativeW = video.videoWidth || 640;
+  // ─ object-fit: cover と同じクロップ計算 ─
+  // ビデオ要素の表示サイズ（CSS上の幅・高さ）
+  const dispW = video.clientWidth  || video.offsetWidth  || 1;
+  const dispH = video.clientHeight || video.offsetHeight || 1;
+  const dispAspect = dispW / dispH;
+
+  // カメラのネイティブ解像度
+  const nativeW = video.videoWidth  || 640;
   const nativeH = video.videoHeight || 480;
+  const nativeAspect = nativeW / nativeH;
+
+  // cover: ネイティブ映像をディスプレイアスペクトに合わせてクロップ
+  let srcX = 0, srcY = 0, srcW = nativeW, srcH = nativeH;
+  if (nativeAspect > dispAspect) {
+    // ネイティブの方が横長 → 左右をクロップ
+    srcH = nativeH;
+    srcW = Math.round(nativeH * dispAspect);
+    srcX = Math.round((nativeW - srcW) / 2);
+  } else {
+    // ネイティブの方が縦長（または同じ） → 上下をクロップ
+    srcW = nativeW;
+    srcH = Math.round(nativeW / dispAspect);
+    srcY = Math.round((nativeH - srcH) / 2);
+  }
+
+  // クロップした範囲のみ canvas に書き出す
   const nativeCanvas = document.createElement("canvas");
-  nativeCanvas.width = nativeW;
-  nativeCanvas.height = nativeH;
-  nativeCanvas.getContext("2d")!.drawImage(video, 0, 0, nativeW, nativeH);
-  capturedImageSrc.value = nativeCanvas.toDataURL("image/jpeg", 0.92);
-  capturedNativeWidth.value = nativeW;
-  capturedNativeHeight.value = nativeH;
+  nativeCanvas.width  = srcW;
+  nativeCanvas.height = srcH;
+  nativeCanvas.getContext("2d")!.drawImage(video, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
+  capturedImageSrc.value      = nativeCanvas.toDataURL("image/jpeg", 0.92);
+  capturedNativeWidth.value   = srcW;
+  capturedNativeHeight.value  = srcH;
 
   // カメラ停止
   stopCamera();
