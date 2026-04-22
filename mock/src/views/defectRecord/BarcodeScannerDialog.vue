@@ -10,7 +10,10 @@
 import { ref, onUnmounted } from "vue";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
-const emit = defineEmits<{ (e: "scanned", code: string): void }>();
+const emit = defineEmits<{
+  (e: "scanned", code: string): void;
+  (e: "closed"): void;
+}>();
 
 const visible       = ref(false);
 const videoEl       = ref<HTMLVideoElement | null>(null);
@@ -86,12 +89,12 @@ const startScan = async () => {
 };
 
 // ─── ライト（トーチ）トグル ────────────────────────
-const toggleTorch = async () => {
+// el-switch の @change で呼ばれる（新値が引数で渡される）
+const applyTorch = async (on: boolean | string | number) => {
   if (!activeTrack || !torchSupported.value) return;
-  torchOn.value = !torchOn.value;
   try {
     await activeTrack.applyConstraints({
-      advanced: [{ torch: torchOn.value } as any],
+      advanced: [{ torch: !!on } as any],
     });
   } catch {
     torchOn.value = !torchOn.value; // 失敗したら戻す
@@ -124,6 +127,7 @@ const close = () => {
   resetDecode();
   scanning.value = false;
   visible.value  = false;
+  emit("closed");
 };
 
 onUnmounted(() => resetDecode());
@@ -149,15 +153,12 @@ defineExpose({ open });
 
       <p v-if="scanning" class="status">{{ statusMessage }}</p>
 
-      <!-- ライトボタン（対応デバイスのみ表示） -->
-      <el-button
-        v-if="torchSupported"
-        :type="torchOn ? 'warning' : 'default'"
-        size="small"
-        @click="toggleTorch"
-      >
-        ライト {{ torchOn ? "ON" : "OFF" }}
-      </el-button>
+      <!-- ライトスイッチ（対応デバイスのみ表示） -->
+      <div v-if="torchSupported" class="flex items-center gap-2">
+        <el-icon style="font-size:18px;"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></el-icon>
+        <span style="font-size:13px;">ライト</span>
+        <el-switch v-model="torchOn" active-color="#E6A23C" @change="applyTorch" />
+      </div>
 
     </div>
 

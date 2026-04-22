@@ -38,12 +38,23 @@ const mode = ref<Mode>("new");
 const barcodeScanner = ref<InstanceType<typeof BarcodeScannerDialog> | null>(null);
 
 const openBarcodeScanner = () => {
+  stopCamera(); // バーコードスキャナーとカメラが競合しないよう先に停止
   barcodeScanner.value?.open();
 };
 
 const onBarcodeScanned = async (code: string) => {
   vehicleCode.value = code;
   await resolveVehicle();
+  // resolveVehicle が startCamera() を呼ぶため再起動不要
+};
+
+// スキャナーが閉じた（スキャン成功 or キャンセル）
+const onBarcodeScannerClosed = async () => {
+  // カメラが止まっており、まだ写真を撮っておらず、車両が確定済みなら再起動
+  if (!hasPhoto.value && form.value.vehicleId && !stream) {
+    await nextTick();
+    await startCamera();
+  }
 };
 
 // ─── フォームデータ ──────────────────────────────
@@ -87,8 +98,9 @@ const resolveVehicle = async () => {
 const videoEl = ref<HTMLVideoElement | null>(null);
 const hasPhoto = ref(false);
 const flashEnabled = ref(false);
+const flashSupported = ref(false);
 let stream: MediaStream | null = null;
-let imageCapture: any = null;
+let flashTrack: MediaStreamTrack | null = null;
 
 // 高解像度キャプチャ用
 const capturedImageSrc = ref("");
@@ -96,16 +108,20 @@ const capturedNativeWidth = ref(0);
 const capturedNativeHeight = ref(0);
 
 const startCamera = async () => {
+  flashEnabled.value = false;
+  flashSupported.value = false;
+  flashTrack = null;
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "environment" },
     });
     if (videoEl.value) {
       videoEl.value.srcObject = stream;
-      // ImageCapture API（非対応ブラウザは無視）
       const track = stream.getVideoTracks()[0];
-      if (track && "ImageCapture" in window) {
-        imageCapture = new (window as any).ImageCapture(track);
+      if (track) {
+        flashTrack = track;
+        const caps = track.getCapabilities?.() as any;
+        flashSupported.value = !!caps?.torch;
       }
     }
   } catch (e) {
@@ -114,20 +130,24 @@ const startCamera = async () => {
 };
 
 const stopCamera = () => {
+  flashEnabled.value = false;
+  flashTrack = null;
   if (stream) {
     stream.getTracks().forEach((t) => t.stop());
     stream = null;
   }
 };
 
-const toggleFlash = async () => {
-  flashEnabled.value = !flashEnabled.value;
-  if (imageCapture) {
-    try {
-      await imageCapture.setOptions({ fillLightMode: flashEnabled.value ? "flash" : "off" });
-    } catch {
-      // 非対応時は無視
-    }
+// el-switch の @change で呼ばれる（新値が引数で渡される）
+const applyFlash = async (on: boolean | string | number) => {
+  if (!flashTrack || !flashSupported.value) return;
+  try {
+    await flashTrack.applyConstraints({
+      advanced: [{ torch: !!on } as any],
+    });
+  } catch {
+    flashEnabled.value = !flashEnabled.value; // 失敗したら戻す
+    flashSupported.value = false;
   }
 };
 
@@ -574,14 +594,11 @@ defineExpose({ open });
           <el-icon><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 15.2A3.2 3.2 0 1 0 12 8.8a3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zM9 3l-1.83 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9z"/></svg></el-icon>
           撮影
         </el-button>
-        <el-button
-          v-if="!hasPhoto"
-          :type="flashEnabled ? 'warning' : 'default'"
-          @click="toggleFlash"
-        >
-          <el-icon><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></el-icon>
-          フラッシュ {{ flashEnabled ? "ON" : "OFF" }}
-        </el-button>
+        <div v-if="!hasPhoto && flashSupported" class="flex items-center gap-1" style="height:32px;">
+          <el-icon style="font-size:16px;"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></el-icon>
+          <span style="font-size:13px;">フラッシュ</span>
+          <el-switch v-model="flashEnabled" active-color="#E6A23C" @change="applyFlash" />
+        </div>
         <el-button
           v-if="hasPhoto"
           :disabled="strokes.length === 0"
@@ -637,7 +654,7 @@ defineExpose({ open });
   </el-dialog>
 
   <!-- バーコードスキャナー -->
-  <BarcodeScannerDialog ref="barcodeScanner" @scanned="onBarcodeScanned" />
+  <BarcodeScannerDialog ref="barcodeScanner" @scanned="onBarcodeScanned" @closed="onBarcodeScannerClosed" />
 </template>
 
 <style scoped>
