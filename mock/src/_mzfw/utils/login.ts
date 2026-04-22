@@ -25,7 +25,7 @@ export const dummyLoginNavigationGuard = async (to: any, from: any, next: (locat
   console.log("🟢 isLoggedIn:", isLoggedIn, "isDummyLoginPage:", isDummyLoginPage, "useDummyAuth:", useDummyAuth);
 
   // アクセスエラーの時は、そのまま次の処理へ進む
-  if (to.name === "AccessError") {
+  if (to.name === "AccessError" || to.name === "Install") {
     console.log("🟢 Access to AccessError page - allowing");
     next();
     return;

@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: "/install",
+    name: "Install",
+    component: () => import("@/views/InstallPage.vue"),
+    meta: { title: "インストール" },
+  },
+  {
     path: "/AccessError",
     name: "AccessError",
     component: AccessError,
