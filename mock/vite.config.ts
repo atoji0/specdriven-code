@@ -34,11 +34,13 @@ export default defineConfig({
       // ビルド時に sw.js と manifest を自動生成
       injectRegister: null,
       workbox: {
-        // SPA のルーティング: 全ナビゲーションを index.html にフォールバック
+        // SPA のルーティング: ナビゲーションリクエスト（HTMLページ）のみ index.html にフォールバック
+        // env.json や API リクエストは除外する
         navigateFallback: "index.html",
+        navigateFallbackDenylist: [/^\/env\//, /^\/api\//],
         // キャッシュ対象のファイルパターン
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,json}"],
-        // GitHub Pages の相対パス対応: SW のスコープをルートに限定しない
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+        // env.json はキャッシュしない（起動ごとに最新を取得）
         globIgnores: ["env/**"],
         // exceljs 等の大きなチャンクに対応（デフォルト 2MB → 10MB）
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
@@ -51,6 +53,7 @@ export default defineConfig({
         background_color: "#ffffff",
         display: "standalone",
         orientation: "portrait",
+        start_url: "/",
         icons: [
           {
             src: "logo.png",
