@@ -68,10 +68,10 @@ watch(
             <UserInfo :router="appRouter" />
           </el-col>
           <!-- 表示日時 -->
-          <el-col :xs="8" :sm="5" class="justify-end pr-2">{{ getCurrentDate() }}</el-col>
+          <el-col :xs="8" :sm="appConfig.showLogo ? 5 : 8" class="justify-end pr-2">{{ getCurrentDate() }}</el-col>
           <!-- ロゴ -->
-          <el-col :xs="0" :sm="3" class="justify-end pr-4">
-            <Logo :show="appConfig.showLogo" />
+          <el-col :xs="0" :sm="appConfig.showLogo ? 3 : 0" class="justify-end pr-4">
+            <Logo :is-show="appConfig.showLogo" />
           </el-col>
         </el-row>
       </el-header>

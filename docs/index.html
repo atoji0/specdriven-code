@@ -2,12 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <link rel="icon" type="image/png" href="./logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sample</title>
-    <script type="module" crossorigin src="./assets/index-DE7MCaxG.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-C4_AWPwE.css">
-  <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+    <title>Spec2App Demo</title>
+    <script>
+      // GitHub Pages SPA リダイレクト復元
+      // 404.html から ?p=<path> で飛んできた場合、history に正しいパスを戻す
+      (function () {
+        var p = new URLSearchParams(window.location.search).get("p");
+        if (p) {
+          window.history.replaceState(null, "", decodeURIComponent(p));
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-D9Z3Q1oH.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DFLDRrj-.css">
+  <link rel="manifest" href="./manifest.webmanifest"></head>
   <body>
     <div id="app"></div>
   </body>

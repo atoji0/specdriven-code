@@ -9,7 +9,7 @@ export const appConfig: AppConfig = {
     { name: "日本語", locale: "ja", font: "🇯🇵" },
     { name: "English", locale: "en", font: "🇺🇸" },
   ],
-  showLogo: true,
+  showLogo: false,
 };
 
 /**

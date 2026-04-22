@@ -238,6 +238,7 @@ form,
   .el-col {
     display: flex;
     align-items: center;
+    height: 100%;
     &.text-right {
       justify-content: flex-end;
     }

@@ -16,6 +16,13 @@ import { APP_DB_CONFIG } from "@/backend/dbConfig";
 // IndexedDB 設定を登録（createApp より前に必ず呼ぶ）
 configureDb(APP_DB_CONFIG);
 
+// Service Worker 登録（file:// では動作しないためスキップ）
+if (location.protocol !== "file:") {
+  import("virtual:pwa-register").then(({ registerSW }) => {
+    registerSW({ immediate: true });
+  });
+}
+
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);

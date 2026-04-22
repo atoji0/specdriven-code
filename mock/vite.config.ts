@@ -32,7 +32,7 @@ export default defineConfig({
       // 新しいバージョンのビルドを検知したら自動で SW を更新してページをリロード
       registerType: "autoUpdate",
       // ビルド時に sw.js と manifest を自動生成
-      injectRegister: "auto",
+      injectRegister: null,
       workbox: {
         // SPA のルーティング: 全ナビゲーションを index.html にフォールバック
         navigateFallback: "index.html",

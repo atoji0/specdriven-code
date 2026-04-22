@@ -12,7 +12,21 @@ withDefaults(defineProps<LogoProps>(), {
 </script>
 
 <template>
-  <div class="hidden md:flex" v-if="isShow">
-    <el-image class="w-30 min-w-35" :src="logoUrl" />
+  <div class="hidden md:flex logo-wrapper" v-if="isShow">
+    <img :src="logoUrl" class="logo-img" />
   </div>
 </template>
+
+<style scoped>
+.logo-wrapper {
+  height: 100%;
+  align-items: center;
+}
+.logo-img {
+  height: 100%;
+  width: auto;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+</style>

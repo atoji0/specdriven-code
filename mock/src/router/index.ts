@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { dummyLoginNavigationGuard } from "mzfw";
 import { AccessError, SystemError } from "mzfw";
@@ -49,12 +49,21 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  // file:// (openEdge) では WebHistory が動作しないためハッシュモードを使用
+  // http/https (GitHub Pages 等) ではクリーンな URL のために WebHistory を使用
+  history: location.protocol === "file:"
+    ? createWebHashHistory()
+    : createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 
 router.beforeEach(async (to, from, next) => {
   await dummyLoginNavigationGuard(to, from, next);
+});
+
+router.afterEach((to) => {
+  const pageTitle = to.meta?.title as string | undefined;
+  document.title = pageTitle ? `${pageTitle} | Spec2App Demo` : "Spec2App Demo";
 });
 
 export default router;
