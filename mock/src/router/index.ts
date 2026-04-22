@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { dummyLoginNavigationGuard } from "mzfw";
 import { AccessError, SystemError } from "mzfw";
@@ -49,11 +49,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  // file:// (openEdge) では WebHistory が動作しないためハッシュモードを使用
-  // http/https (GitHub Pages 等) ではクリーンな URL のために WebHistory を使用
-  history: location.protocol === "file:"
-    ? createWebHashHistory()
-    : createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
 });
 

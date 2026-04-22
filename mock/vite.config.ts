@@ -34,10 +34,6 @@ export default defineConfig({
       // ビルド時に sw.js と manifest を自動生成
       injectRegister: null,
       workbox: {
-        // SPA のルーティング: ナビゲーションリクエスト（HTMLページ）のみ index.html にフォールバック
-        // env.json や API リクエストは除外する
-        navigateFallback: "index.html",
-        navigateFallbackDenylist: [/^\/env\//, /^\/api\//],
         // キャッシュ対象のファイルパターン
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         // env.json はキャッシュしない（起動ごとに最新を取得）
@@ -68,4 +64,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+});;
